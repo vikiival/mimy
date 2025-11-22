@@ -3,7 +3,6 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { countries, SelfApp, SelfAppBuilder, SelfQRcodeWrapper, getUniversalLink } from "@selfxyz/qrcode"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Copy, ExternalLink, Shield, CheckCircle } from "lucide-react"
 import { Hex } from 'ox'
 
@@ -101,8 +100,8 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
 
   return (
     <div className={`w-full ${className}`}>
-      <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
-        <CardHeader className="text-center pb-4">
+      <div className="pb-4">
+        <div className="text-center pb-4">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center shadow-md">
             {isVerified ? (
               <CheckCircle className="w-8 h-8 text-white" />
@@ -110,31 +109,17 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
               <Shield className="w-8 h-8 text-white" />
             )}
           </div>
-          <CardTitle className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-gray-900">
             {isVerified ? "Verified!" : `Verify to See ${username}'s Perks`}
-          </CardTitle>
-          <CardDescription className="text-gray-600 mt-2">
+          </h2>
+          <p className="text-gray-600 mt-2">
             {isVerified
               ? "Your identity has been successfully verified"
               : `Scan the QR code with the Self Protocol app to verify your identity and access exclusive links from ${username || 'this user'}`}
-          </CardDescription>
-        </CardHeader>
+          </p>
+        </div>
         
-        <CardContent className="space-y-6">
-          {/* Info Box */}
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
-              <Shield className="w-4 h-4" />
-              Why verify?
-            </h4>
-            <ul className="text-sm text-blue-800 space-y-1">
-              <li>• Access exclusive content and links</li>
-              <li>• Ensures fair access to perks</li>
-              <li>• Privacy-preserving verification (18+)</li>
-              <li>• Decentralized identity proof</li>
-            </ul>
-          </div>
-
+        <div className="space-y-6">
           {!isVerified && (
             <>
               {/* QR Code */}
@@ -219,8 +204,8 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Toast notification */}
       {showToast && (
