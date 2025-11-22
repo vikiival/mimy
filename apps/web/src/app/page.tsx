@@ -52,10 +52,10 @@ export default function Home() {
   if (!isMiniAppReady) {
     return (
       <main className="flex-1">
-        <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <section className="flex items-center justify-center min-h-screen bg-background">
           <div className="w-full max-w-md mx-auto p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading...</p>
           </div>
         </section>
       </main>
@@ -64,12 +64,12 @@ export default function Home() {
   
   return (
     <main className="flex-1">
-      <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+      <section className="flex items-center justify-center min-h-screen bg-background py-8">
         <div className="w-full max-w-md mx-auto px-6">
           {/* Profile Section */}
           <div className="text-center mb-8">
             {/* Profile Avatar */}
-            <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center overflow-hidden shadow-lg">
+            <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center overflow-hidden shadow-lg">
               {pfpUrl ? (
                 <img 
                   src={pfpUrl} 
@@ -85,19 +85,19 @@ export default function Home() {
             
             {/* Profile Info */}
             <div className="mb-4">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">
+              <h1 className="text-2xl font-bold text-foreground mb-1">
                 {displayName}
               </h1>
-              <p className="text-gray-600 text-sm mb-3">
+              <p className="text-muted-foreground text-sm mb-3">
                 {username.startsWith('@') ? username : `@${username}`}
               </p>
               
               {/* Wallet Address Chip */}
-              <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
+              <div className="inline-flex items-center gap-2 bg-card backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
                 <div className={`w-2 h-2 rounded-full ${
                   isConnected ? 'bg-green-500' : 'bg-gray-400'
                 }`}></div>
-                <span className="text-xs text-gray-700 font-mono">
+                <span className="text-xs text-foreground font-mono">
                   {formatAddress(walletAddress)}
                 </span>
               </div>
@@ -107,24 +107,24 @@ export default function Home() {
           {/* Links Section */}
           <div className="space-y-3 mb-6">
             {/* Verification Card */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-lg border border-gray-200">
+            <div className="bg-card backdrop-blur-sm rounded-lg p-6 shadow-lg border border-border">
               <div className="text-center mb-4">
-                <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center shadow-md">
+                <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-md">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 mb-2">
+                <h2 className="text-xl font-bold text-foreground mb-2">
                   Exclusive Content
                 </h2>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-muted-foreground mb-4">
                   You need Self verification to access {displayName}'s exclusive links and perks
                 </p>
               </div>
               
               <Button
                 onClick={() => setShowVerifyModal(true)}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-6 text-base shadow-lg"
+                className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground font-semibold py-6 text-base shadow-lg"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -132,8 +132,8 @@ export default function Home() {
                 Verify with Self Protocol
               </Button>
               
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <div className="flex items-start gap-2 text-xs text-gray-500">
+              <div className="mt-4 pt-4 border-t border-border">
+                <div className="flex items-start gap-2 text-xs text-muted-foreground">
                   <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
@@ -175,7 +175,7 @@ export default function Home() {
                 }
               }}
               disabled={isAddingMiniApp}
-              className="w-full bg-white/60 hover:bg-white/80 disabled:bg-white/40 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm"
+              className="w-full bg-card hover:bg-card/80 disabled:bg-card/40 text-foreground font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm"
             >
               {isAddingMiniApp ? (
                 <>
@@ -192,8 +192,8 @@ export default function Home() {
             
             {/* Add Miniapp Status Message */}
             {addMiniAppMessage && (
-              <div className="mt-3 p-3 bg-white/50 backdrop-blur-sm rounded-lg shadow-sm">
-                <p className="text-sm text-gray-700">{addMiniAppMessage}</p>
+              <div className="mt-3 p-3 bg-card backdrop-blur-sm rounded-lg shadow-sm">
+                <p className="text-sm text-foreground">{addMiniAppMessage}</p>
               </div>
             )}
           </div>

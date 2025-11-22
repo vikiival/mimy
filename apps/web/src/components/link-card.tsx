@@ -17,30 +17,30 @@ export const LinkCard = React.forwardRef<HTMLDivElement, LinkCardProps>(
         className={cn(
           'group relative overflow-hidden transition-all duration-300 cursor-pointer',
           'hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]',
-          'bg-white/80 backdrop-blur-sm border-gray-200',
+          'bg-card backdrop-blur-sm border-border',
           !link.enabled && 'opacity-50 cursor-not-allowed'
         )}
       >
         <div className="flex items-center gap-4 p-4">
           {/* Icon */}
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-2xl shadow-md">
+          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-2xl shadow-md">
             {link.icon || '🔗'}
           </div>
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+            <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
               {link.title}
             </h3>
             {link.description && (
-              <p className="text-sm text-gray-500 truncate mt-0.5">
+              <p className="text-sm text-muted-foreground truncate mt-0.5">
                 {link.description}
               </p>
             )}
           </div>
 
           {/* Arrow Icon */}
-          <div className="flex-shrink-0 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all">
+          <div className="flex-shrink-0 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all">
             <svg
               className="w-5 h-5"
               fill="none"

@@ -36,10 +36,10 @@ export default function VerifiedPage() {
   if (!isMiniAppReady) {
     return (
       <main className="flex-1">
-        <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <section className="flex items-center justify-center min-h-screen bg-background">
           <div className="w-full max-w-md mx-auto p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading...</p>
           </div>
         </section>
       </main>
@@ -48,7 +48,7 @@ export default function VerifiedPage() {
   
   return (
     <main className="flex-1">
-      <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+      <section className="flex items-center justify-center min-h-screen bg-background py-8">
         <div className="w-full max-w-md mx-auto px-6">
           {/* Success Badge */}
           <div className="text-center mb-6">
@@ -63,7 +63,7 @@ export default function VerifiedPage() {
           {/* Profile Section */}
           <div className="text-center mb-8">
             {/* Profile Avatar */}
-            <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center overflow-hidden shadow-lg">
+            <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center overflow-hidden shadow-lg">
               {pfpUrl ? (
                 <img 
                   src={pfpUrl} 
@@ -79,19 +79,19 @@ export default function VerifiedPage() {
             
             {/* Profile Info */}
             <div className="mb-4">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">
+              <h1 className="text-2xl font-bold text-foreground mb-1">
                 {displayName}
               </h1>
-              <p className="text-gray-600 text-sm mb-3">
+              <p className="text-muted-foreground text-sm mb-3">
                 {username.startsWith('@') ? username : `@${username}`}
               </p>
               
               {/* Wallet Address Chip */}
-              <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
+              <div className="inline-flex items-center gap-2 bg-card backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
                 <div className={`w-2 h-2 rounded-full ${
                   isConnected ? 'bg-green-500' : 'bg-gray-400'
                 }`}></div>
-                <span className="text-xs text-gray-700 font-mono">
+                <span className="text-xs text-foreground font-mono">
                   {formatAddress(walletAddress)}
                 </span>
               </div>
@@ -119,7 +119,7 @@ export default function VerifiedPage() {
           <div className="max-w-2xl mx-auto w-full px-4">
             <SheetHeader className="mb-6">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-2xl shadow-md">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-2xl shadow-md">
                   {selectedLink?.icon || '🔗'}
                 </div>
                 <div className="flex-1 text-left">
@@ -131,21 +131,21 @@ export default function VerifiedPage() {
             
             {/* Empty state for now - will be filled with link-specific content */}
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4">
                 <span className="text-4xl">{selectedLink?.icon || '🔗'}</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
                 Link Details
               </h3>
-              <p className="text-sm text-gray-500 mb-6 max-w-xs">
+              <p className="text-sm text-muted-foreground mb-6 max-w-xs">
                 This modal will display additional information and actions for this link.
               </p>
               
               {/* URL Display */}
               {selectedLink?.url && (
-                <div className="w-full bg-gray-50 rounded-lg p-4 mb-4">
-                  <p className="text-xs text-gray-500 mb-1">URL</p>
-                  <p className="text-sm text-gray-700 font-mono break-all">
+                <div className="w-full bg-card rounded-lg p-4 mb-4">
+                  <p className="text-xs text-muted-foreground mb-1">URL</p>
+                  <p className="text-sm text-foreground font-mono break-all">
                     {selectedLink.url}
                   </p>
                 </div>

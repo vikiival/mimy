@@ -102,17 +102,17 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
     <div className={`w-full ${className}`}>
       <div className="pb-4">
         <div className="text-center pb-4">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center shadow-md">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-md">
             {isVerified ? (
               <CheckCircle className="w-8 h-8 text-white" />
             ) : (
               <Shield className="w-8 h-8 text-white" />
             )}
           </div>
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-foreground">
             {isVerified ? "Verified!" : `Verify to See ${username}'s Perks`}
           </h2>
-          <p className="text-gray-600 mt-2">
+          <p className="text-muted-foreground mt-2">
             {isVerified
               ? "Your identity has been successfully verified"
               : `Scan the QR code with the Self Protocol app to verify your identity and access exclusive links from ${username || 'this user'}`}
@@ -124,7 +124,7 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
             <>
               {/* QR Code */}
               <div className="flex justify-center">
-                <div className="p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+                <div className="p-4 bg-card rounded-xl shadow-sm border border-border">
                   {selfApp ? (
                     <SelfQRcodeWrapper
                       selfApp={selfApp}
@@ -132,8 +132,8 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
                       onError={handleError}
                     />
                   ) : (
-                    <div className="w-[256px] h-[256px] bg-gray-100 flex items-center justify-center rounded-lg">
-                      <p className="text-gray-500 text-sm">Loading QR Code...</p>
+                    <div className="w-[256px] h-[256px] bg-muted flex items-center justify-center rounded-lg">
+                      <p className="text-muted-foreground text-sm">Loading QR Code...</p>
                     </div>
                   )}
                 </div>
@@ -145,7 +145,7 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
                   onClick={handleCopyLink}
                   disabled={!universalLink}
                   variant="outline"
-                  className="flex-1 border-gray-300 hover:bg-gray-50"
+                  className="flex-1 border-border hover:bg-muted"
                 >
                   <Copy className="w-4 h-4 mr-2" />
                   {linkCopied ? "Copied!" : "Copy Link"}
@@ -154,7 +154,7 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
                 <Button
                   onClick={handleOpenApp}
                   disabled={!universalLink}
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-md"
+                  className="flex-1 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground shadow-md"
                 >
                   <ExternalLink className="w-4 h-4 mr-2" />
                   Open Self App
@@ -166,30 +166,30 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
           {/* User Address */}
           <div className="space-y-2">
             <div className="flex items-center justify-center gap-2">
-              <span className="text-gray-500 text-xs uppercase tracking-wide font-medium">
+              <span className="text-muted-foreground text-xs uppercase tracking-wide font-medium">
                 {isVerified ? "Verified Address" : "Connected Address"}
               </span>
               {isVerified && <CheckCircle className="w-4 h-4 text-green-500" />}
             </div>
-            <div className="bg-gray-50 rounded-lg px-3 py-2.5 text-center break-all text-sm font-mono text-gray-800 border border-gray-200">
+            <div className="bg-card rounded-lg px-3 py-2.5 text-center break-all text-sm font-mono text-foreground border border-border">
               {effectiveAddress !== "0x0000000000000000000000000000000000000000" ? (
                 effectiveAddress
               ) : (
-                <span className="text-gray-400">Not connected</span>
+                <span className="text-muted-foreground">Not connected</span>
               )}
             </div>
           </div>
 
           {/* Instructions */}
           {!isVerified && (
-            <div className="text-center text-sm text-gray-600 space-y-3 pt-2">
+            <div className="text-center text-sm text-muted-foreground space-y-3 pt-2">
               <p className="font-medium">Don't have the Self app?</p>
               <div className="flex justify-center gap-4">
                 <a
                   href="https://apps.apple.com/app/self-protocol/id6443896588"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline underline-offset-2 transition-colors"
+                  className="text-primary hover:text-accent underline underline-offset-2 transition-colors"
                 >
                   Download for iOS
                 </a>
@@ -197,7 +197,7 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
                   href="https://play.google.com/store/apps/details?id=com.selfxyz.app"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline underline-offset-2 transition-colors"
+                  className="text-primary hover:text-accent underline underline-offset-2 transition-colors"
                 >
                   Download for Android
                 </a>
