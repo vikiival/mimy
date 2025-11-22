@@ -183,7 +183,7 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
           {/* Instructions */}
           {!isVerified && (
             <div className="text-center text-sm text-muted-foreground space-y-3 pt-2">
-              <p className="font-medium">Don't have the Self app?</p>
+              <p className="font-medium">Don&apos;t have the Self app?</p>
               <div className="flex justify-center gap-4">
                 <a
                   href="https://apps.apple.com/app/self-protocol/id6443896588"

@@ -17,6 +17,7 @@
     "@farcaster/quick-auth": "latest",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
+    "@selfxyz/common": "^0.0.9",
     "@selfxyz/core": "1.1.0-beta.7",
     "@selfxyz/qrcode": "^1.0.17",
     "@t3-oss/env-nextjs": "^0.12.0",

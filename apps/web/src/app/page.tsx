@@ -140,7 +140,7 @@ export default function Home() {
                   Exclusive Content
                 </h2>
                 <p className="text-sm text-muted-foreground mb-4">
-                  You need Self verification to access {displayName}'s exclusive links and perks
+                  You need Self verification to access {displayName}&apos;s exclusive links and perks
                 </p>
               </div>
               
