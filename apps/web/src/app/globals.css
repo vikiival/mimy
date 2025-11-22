@@ -6,12 +6,12 @@
   :root {
     /* Custom color palette - HSL values */
     --background: 210 15% 10%;       /* #171a1e */
-    --foreground: 0 0% 95%;          /* #f2f2f2 - softer white */
+    --foreground: 0 0% 95%;          /* #F2F2F2 - softer white */
     
     --primary: 209 47% 46%;          /* #4074ad - blue */
     --primary-foreground: 0 0% 95%;  /* light text on primary */
     
-    --secondary: 207 69% 25%;        /* #12436b - dark blue */
+    --secondary: 215 31% 39%;        /* #435f83 - muted blue */
     --secondary-foreground: 0 0% 95%;
     
     --accent: 209 59% 70%;           /* #8ab2df - light blue */
@@ -49,7 +49,7 @@
     --primary: 209 47% 46%;
     --primary-foreground: 0 0% 95%;
 
-    --secondary: 207 69% 25%;
+    --secondary: 215 31% 39%;
     --secondary-foreground: 0 0% 95%;
 
     --muted: 210 15% 20%;
