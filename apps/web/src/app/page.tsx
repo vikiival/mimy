@@ -13,12 +13,17 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { getHaloInfo } from "@/lib/halo";
 
 export default function Home() {
   const { context, isMiniAppReady } = useMiniApp();
   const [isAddingMiniApp, setIsAddingMiniApp] = useState(false);
   const [addMiniAppMessage, setAddMiniAppMessage] = useState<string | null>(null);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [showHaloModal, setShowHaloModal] = useState(false);
+  const [haloData, setHaloData] = useState<any>(null);
+  const [isReadingHalo, setIsReadingHalo] = useState(false);
+  const [haloError, setHaloError] = useState<string | null>(null);
   const router = useRouter();
   
   // Wallet connection hooks
@@ -47,6 +52,23 @@ export default function Home() {
   const formatAddress = (address: string) => {
     if (!address || address.length < 10) return address;
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
+  
+  // Handle HaLo chip reading
+  const handleReadHaloData = async () => {
+    setIsReadingHalo(true);
+    setHaloError(null);
+    setHaloData(null);
+    
+    try {
+      const data = await getHaloInfo();
+      setHaloData(data);
+    } catch (error: any) {
+      console.error('HaLo read error:', error);
+      setHaloError(error.message || 'Failed to read HaLo chip');
+    } finally {
+      setIsReadingHalo(false);
+    }
   };
   
   if (!isMiniAppReady) {
@@ -144,6 +166,33 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            {/* HaLo NFC Card */}
+            <div className="bg-card backdrop-blur-sm rounded-lg p-6 shadow-lg border border-border">
+              <div className="text-center mb-4">
+                <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-accent to-primary flex items-center justify-center shadow-md">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h2 className="text-xl font-bold text-foreground mb-2">
+                  HaLo NFC
+                </h2>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Read data from your HaLo NFC chip
+                </p>
+              </div>
+              
+              <Button
+                onClick={() => setShowHaloModal(true)}
+                className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-primary-foreground font-semibold py-6 text-base shadow-lg"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Read HaLo Data
+              </Button>
+            </div>
           </div>
 
           {/* Add Miniapp Button */}
@@ -225,6 +274,118 @@ export default function Home() {
                 console.error('Verification error:', error);
               }}
             />
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* HaLo NFC Modal */}
+      <Sheet open={showHaloModal} onOpenChange={setShowHaloModal}>
+        <SheetContent side="bottom" className="h-[90vh] rounded-t-3xl overflow-y-auto">
+          <div className="max-w-2xl mx-auto w-full px-4">
+            <SheetHeader className="mb-6">
+              <SheetTitle className="text-2xl text-center">HaLo NFC Reader</SheetTitle>
+              <SheetDescription className="text-center">
+                Tap your HaLo NFC chip to read data
+              </SheetDescription>
+            </SheetHeader>
+            
+            <div className="space-y-4">
+              {/* Read Button */}
+              {!haloData && !haloError && (
+                <div className="text-center">
+                  <Button
+                    onClick={handleReadHaloData}
+                    disabled={isReadingHalo}
+                    className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-primary-foreground font-semibold py-8 text-lg shadow-lg"
+                  >
+                    {isReadingHalo ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Reading HaLo Chip...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Tap to Read
+                      </>
+                    )}
+                  </Button>
+                  
+                  <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+                    <p className="text-sm text-muted-foreground text-center">
+                      Make sure your device supports NFC and hold your HaLo chip close to your device when prompted
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Error Display */}
+              {haloError && (
+                <div className="space-y-4">
+                  <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                      </svg>
+                      <div>
+                        <h3 className="font-semibold text-destructive mb-1">Error Reading Chip</h3>
+                        <p className="text-sm text-destructive/80">{haloError}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <Button
+                    onClick={handleReadHaloData}
+                    disabled={isReadingHalo}
+                    className="w-full"
+                    variant="outline"
+                  >
+                    Try Again
+                  </Button>
+                </div>
+              )}
+
+              {/* Data Display */}
+              {haloData && (
+                <div className="space-y-4">
+                  <div className="p-4 bg-accent/10 border border-accent/20 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <h3 className="font-semibold text-foreground">Successfully Read</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      HaLo chip data retrieved successfully
+                    </p>
+                  </div>
+
+                  <div className="bg-card border border-border rounded-lg overflow-hidden">
+                    <div className="bg-muted px-4 py-2 border-b border-border">
+                      <h4 className="text-sm font-semibold text-foreground">Raw JSON Data</h4>
+                    </div>
+                    <div className="p-4 overflow-x-auto">
+                      <pre className="text-xs text-foreground font-mono whitespace-pre-wrap break-all">
+                        {JSON.stringify(haloData, null, 2)}
+                      </pre>
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={() => {
+                      setHaloData(null);
+                      setHaloError(null);
+                    }}
+                    className="w-full"
+                    variant="outline"
+                  >
+                    Read Another Chip
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </SheetContent>
       </Sheet>
