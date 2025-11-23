@@ -44,9 +44,9 @@ export default function Home() {
   const user = context?.user;
   // Use connected wallet address if available, otherwise fall back to user custody/verification
   const walletAddress = address || user?.custody || user?.verifications?.[0] || "0x1e4B...605B";
-  const displayName = user?.displayName || user?.username || "User";
-  const username = user?.username || "@user";
-  const pfpUrl = user?.pfpUrl;
+  const displayName = user?.displayName || user?.username || "Viki";
+  const username = user?.username || "@viki";
+  const pfpUrl = user?.pfpUrl || "https://github.com/vikiival.png";
   
   // Format wallet address to show first 6 and last 4 characters
   const formatAddress = (address: string) => {
