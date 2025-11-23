@@ -81,7 +81,7 @@ export async function POST(request: Request) {
       // Send a test notification
       await sendFrameNotification({
         fid,
-        title: "Welcome to mimy2!",
+        title: "Welcome to May I?",
         body: "You've successfully enabled notifications.",
       });
 

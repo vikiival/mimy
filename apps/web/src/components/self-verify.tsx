@@ -28,6 +28,9 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
   useEffect(() => {
     try {
         console.log("Initializing Self app with address:", process.env.NEXT_PUBLIC_BASE_URL)
+        // NEXT_PUBLIC_SELF_ENDPOINT base + /verified
+        const endpointUrl = process.env.NEXT_PUBLIC_SELF_ENDPOINT || "https://self-verify.example.com"
+        const callback = new URL("/verified", endpointUrl)
       const app = new SelfAppBuilder({
         version: 2,
         appName: process.env.NEXT_PUBLIC_SELF_APP_NAME || "Decentralized Linktree",
@@ -36,7 +39,7 @@ export function SelfVerify({ onSuccess, onError, className, address, username }:
         logoBase64: "https://i.imgur.com/Rz8B3s7.png",
         userId: effectiveAddress,
           // url + /verified
-        deeplinkCallback: `${process.env.NEXT_PUBLIC_BASE_URL || "https://localhost:3000"}/verified`,
+        deeplinkCallback: callback.href,
         endpointType: "staging_https",
         userIdType: "hex",
         userDefinedData: `Verify to see ${username || 'user'}'s links`,
