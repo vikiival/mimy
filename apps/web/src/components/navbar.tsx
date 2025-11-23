@@ -2,8 +2,14 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { useAccount, useConnect } from "wagmi"
 
 export function Navbar() {
+  // const { address, isConnected } = useAccount()
+  // const { connect, connectors } = useConnect()
+  const address = "0x02Ed0637Bb90d75E437429bb96CC564C2C4C9B5f"
+  const isConnected = true
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4">
@@ -15,7 +21,15 @@ export function Navbar() {
         </Link>
         
         {/* Connect Button */}
-        <Button variant="outline" size="sm">Connect Wallet</Button>
+        {!isConnected ? (
+          <Button variant="outline" size="sm">
+            Connect Wallet
+          </Button>
+        ) : (
+          <Button variant="outline" size="sm">
+            {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Disconnect'}
+          </Button>
+        )}
       </div>
     </header>
   )
