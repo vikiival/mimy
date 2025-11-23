@@ -5,6 +5,7 @@ import { useAccount } from "wagmi";
 import { SAMPLE_PERKS, Perk } from "@/types/links";
 import { signMessage } from "@/lib/halo";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   Sheet,
   SheetContent,
@@ -27,7 +28,7 @@ export default function VerifiedPage() {
   
   // Extract user data from context
   const user = context?.user;
-  const walletAddress = address || user?.custody || user?.verifications?.[0] || "0x1e4B...605B";
+  const walletAddress = address || user?.custody || user?.verifications?.[0] || "0x832e535D4B9a110125AcBb1664EC0ee39D6a01C4";
   const displayName = user?.displayName || user?.username || "Viki";
   const username = user?.username || "@viki";
   const pfpUrl = user?.pfpUrl || "https://github.com/vikiival.png";
@@ -296,12 +297,20 @@ export default function VerifiedPage() {
                         try {
                           // Simulate transaction sending
                           await new Promise(resolve => setTimeout(resolve, 2000));
-                          alert('Tokens claimed successfully! 🎉');
-                          setSelectedPerk(null);
-                          setHaloSignature(null);
+                          toast.success('Tokens claimed successfully! 🎉', {
+                            description: '500 tokens have been sent to your wallet',
+                          });
+                          
+                          // Close modal after a short delay
+                          setTimeout(() => {
+                            setSelectedPerk(null);
+                            setHaloSignature(null);
+                          }, 1500);
                         } catch (error) {
                           console.error('Transaction error:', error);
-                          alert('Failed to send tokens');
+                          toast.error('Failed to send tokens', {
+                            description: 'Please try again later',
+                          });
                         } finally {
                           setIsSendingTokens(false);
                         }

@@ -43,7 +43,7 @@ export default function Home() {
   // Extract user data from context
   const user = context?.user;
   // Use connected wallet address if available, otherwise fall back to user custody/verification
-  const walletAddress = address || user?.custody || user?.verifications?.[0] || "0x1e4B...605B";
+  const walletAddress = address || user?.custody || user?.verifications?.[0] || "0x832e535D4B9a110125AcBb1664EC0ee39D6a01C4";
   const displayName = user?.displayName || user?.username || "Viki";
   const username = user?.username || "@viki";
   const pfpUrl = user?.pfpUrl || "https://github.com/vikiival.png";
