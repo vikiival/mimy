@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { useMiniApp } from '@/contexts/miniapp-context'
+// import { sdk } from '@farcaster/miniapp-sdk'
 
 export function WalletConnectButton() {
   const [mounted, setMounted] = useState(false)
