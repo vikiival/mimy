@@ -2,8 +2,9 @@
 import { useMiniApp } from "@/contexts/miniapp-context";
 import { useState } from "react";
 import { useAccount } from "wagmi";
-import { LinkCard } from "@/components/link-card";
-import { SAMPLE_LINKS, Link } from "@/types/links";
+import { SAMPLE_PERKS, Perk } from "@/types/links";
+import { signMessage } from "@/lib/halo";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -14,8 +15,12 @@ import {
 
 export default function VerifiedPage() {
   const { context, isMiniAppReady } = useMiniApp();
-  const [selectedLink, setSelectedLink] = useState<Link | null>(null);
-  const [links] = useState<Link[]>(SAMPLE_LINKS);
+  const [selectedPerk, setSelectedPerk] = useState<Perk | null>(null);
+  const [perks] = useState<Perk[]>(SAMPLE_PERKS);
+  const [haloSignature, setHaloSignature] = useState<any>(null);
+  const [isSigningWithHalo, setIsSigningWithHalo] = useState(false);
+  const [haloError, setHaloError] = useState<string | null>(null);
+  const [isSendingTokens, setIsSendingTokens] = useState(false);
   
   // Wallet connection hooks
   const { address, isConnected } = useAccount();
@@ -50,16 +55,6 @@ export default function VerifiedPage() {
     <main className="flex-1">
       <section className="flex items-center justify-center min-h-screen bg-background py-8">
         <div className="w-full max-w-md mx-auto px-6">
-          {/* Success Badge */}
-          <div className="text-center mb-6">
-            <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full mb-4">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span className="font-semibold text-sm">Verified</span>
-            </div>
-          </div>
-
           {/* Profile Section */}
           <div className="text-center mb-8">
             {/* Profile Avatar */}
@@ -98,70 +93,264 @@ export default function VerifiedPage() {
             </div>
           </div>
 
-          {/* Links Section */}
+        {/* Success Badge */}
+        <div className="text-center mb-6">
+            <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full mb-4">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-semibold text-sm">Verified</span>
+            </div>
+        </div>
+
+          {/* Perks Section */}
           <div className="space-y-3 mb-6">
-            {links
-              .filter(link => link.enabled)
-              .map((link) => (
-                <LinkCard
-                  key={link.id}
-                  link={link}
-                  onClick={(link) => setSelectedLink(link)}
-                />
-              ))}
+            {perks.map((perk) => (
+              <button
+                key={perk.id}
+                onClick={() => perk.enabled && setSelectedPerk(perk)}
+                disabled={!perk.enabled}
+                className={`w-full group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 ${
+                  perk.enabled
+                    ? 'bg-card hover:bg-card/80 shadow-lg hover:shadow-xl cursor-pointer'
+                    : 'bg-muted/50 opacity-60 cursor-not-allowed'
+                }`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-3xl shadow-md ${
+                    perk.enabled
+                      ? 'bg-gradient-to-br from-primary to-accent'
+                      : 'bg-muted'
+                  }`}>
+                    {perk.icon}
+                  </div>
+                  <div className="flex-1 text-left">
+                    <h3 className="font-semibold text-foreground text-lg mb-1">
+                      {perk.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-1">
+                      {perk.description}
+                    </p>
+                    {perk.requirement && (
+                      <p className="text-xs text-muted-foreground/80 italic">
+                        {perk.requirement}
+                      </p>
+                    )}
+                  </div>
+                  {perk.enabled ? (
+                    <svg className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-6 h-6 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  )}
+                </div>
+                {!perk.enabled && (
+                  <div className="mt-3 pt-3 border-t border-border">
+                    <p className="text-xs text-muted-foreground">
+                      {perk.type === 'tshirt' ? 'Out of stock' : 'Coming soon'}
+                    </p>
+                  </div>
+                )}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Link Details Sheet/Modal */}
-      <Sheet open={!!selectedLink} onOpenChange={(open) => !open && setSelectedLink(null)}>
-        <SheetContent side="bottom" className="h-[80vh] rounded-t-3xl">
+      {/* Perk Details Sheet/Modal */}
+      <Sheet open={!!selectedPerk} onOpenChange={(open) => !open && setSelectedPerk(null)}>
+        <SheetContent side="bottom" className="h-[80vh] rounded-t-3xl overflow-y-auto">
           <div className="max-w-2xl mx-auto w-full px-4">
             <SheetHeader className="mb-6">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-2xl shadow-md">
-                  {selectedLink?.icon || '🔗'}
+                  {selectedPerk?.icon || '🎁'}
                 </div>
                 <div className="flex-1 text-left">
-                  <SheetTitle className="text-xl">{selectedLink?.title}</SheetTitle>
-                  <SheetDescription>{selectedLink?.description}</SheetDescription>
+                  <SheetTitle className="text-xl">{selectedPerk?.title}</SheetTitle>
+                  <SheetDescription>{selectedPerk?.description}</SheetDescription>
                 </div>
               </div>
             </SheetHeader>
             
-            {/* Empty state for now - will be filled with link-specific content */}
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4">
-                <span className="text-4xl">{selectedLink?.icon || '🔗'}</span>
-              </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">
-                Link Details
-              </h3>
-              <p className="text-sm text-muted-foreground mb-6 max-w-xs">
-                This modal will display additional information and actions for this link.
-              </p>
-              
-              {/* URL Display */}
-              {selectedLink?.url && (
-                <div className="w-full bg-card rounded-lg p-4 mb-4">
-                  <p className="text-xs text-muted-foreground mb-1">URL</p>
-                  <p className="text-sm text-foreground font-mono break-all">
-                    {selectedLink.url}
-                  </p>
+            {/* Token Claim Flow */}
+            {selectedPerk?.type === 'token' && (
+              <div className="space-y-4">
+                {/* Requirements */}
+                <div className="bg-muted/50 rounded-lg p-4">
+                  <div className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <p className="text-sm font-medium text-foreground mb-1">Requirements</p>
+                      <p className="text-xs text-muted-foreground">{selectedPerk.requirement}</p>
+                    </div>
+                  </div>
                 </div>
-              )}
-              
-              {/* Action Button Placeholder */}
-              <button
-                onClick={() => {
-                  // Will implement actual link opening logic later
-                  console.log('Opening link:', selectedLink?.url);
-                }}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
-              >
-                Open Link
-              </button>
-            </div>
+
+                {/* Token Details */}
+                <div className="bg-card rounded-lg p-6 border border-border">
+                  <div className="text-center mb-4">
+                    <div className="text-4xl mb-2">{selectedPerk.icon}</div>
+                    <p className="text-3xl font-bold text-foreground mb-1">500</p>
+                    <p className="text-sm text-muted-foreground">Tokens to claim</p>
+                  </div>
+                  
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between py-2 border-t border-border">
+                      <span className="text-muted-foreground">Recipient</span>
+                      <span className="text-foreground font-mono">{formatAddress(walletAddress)}</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-t border-border">
+                      <span className="text-muted-foreground">Amount</span>
+                      <span className="text-foreground font-semibold">500 Tokens</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-t border-border">
+                      <span className="text-muted-foreground">Status</span>
+                      <span className={`font-medium ${haloSignature ? 'text-green-500' : 'text-muted-foreground'}`}>
+                        {haloSignature ? '✓ Signed' : 'Not signed'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* HaLo Signature Section */}
+                {!haloSignature && (
+                  <div className="space-y-3">
+                    <p className="text-sm text-muted-foreground text-center">
+                      Tap your HaLo chip to sign the transaction
+                    </p>
+                    <Button
+                      onClick={async () => {
+                        setIsSigningWithHalo(true);
+                        setHaloError(null);
+                        
+                        try {
+                          // Create the message to sign
+                          const message = `Claim 500 tokens to ${walletAddress}`;
+                          const signature = await signMessage(message, 1, 'text');
+                          setHaloSignature(signature);
+                        } catch (error: any) {
+                          console.error('HaLo signing error:', error);
+                          setHaloError(error.message || 'Failed to sign with HaLo chip');
+                        } finally {
+                          setIsSigningWithHalo(false);
+                        }
+                      }}
+                      disabled={isSigningWithHalo}
+                      className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-primary-foreground font-semibold py-6 text-base shadow-lg"
+                    >
+                      {isSigningWithHalo ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                          Tap your HaLo chip...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                          </svg>
+                          Sign with HaLo Chip
+                        </>
+                      )}
+                    </Button>
+                    
+                    {haloError && (
+                      <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                        <p className="text-sm text-destructive">{haloError}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Signature Display */}
+                {haloSignature && (
+                  <div className="space-y-3">
+                    <div className="p-4 bg-accent/10 border border-accent/20 rounded-lg">
+                      <div className="flex items-center gap-2 mb-2">
+                        <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <h4 className="font-semibold text-foreground">Signature Verified</h4>
+                      </div>
+                      <div className="bg-card rounded p-3 mt-2">
+                        <p className="text-xs text-muted-foreground mb-1">Ethereum Address</p>
+                        <p className="text-xs font-mono text-foreground break-all mb-3">
+                          {haloSignature.etherAddress}
+                        </p>
+                        <p className="text-xs text-muted-foreground mb-1">Signature</p>
+                        <p className="text-xs font-mono text-foreground break-all">
+                          {haloSignature.signature.ether}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Send Transaction Button */}
+                    <Button
+                      onClick={async () => {
+                        setIsSendingTokens(true);
+                        try {
+                          // Simulate transaction sending
+                          await new Promise(resolve => setTimeout(resolve, 2000));
+                          alert('Tokens claimed successfully! 🎉');
+                          setSelectedPerk(null);
+                          setHaloSignature(null);
+                        } catch (error) {
+                          console.error('Transaction error:', error);
+                          alert('Failed to send tokens');
+                        } finally {
+                          setIsSendingTokens(false);
+                        }
+                      }}
+                      disabled={isSendingTokens}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-6 text-base shadow-lg"
+                    >
+                      {isSendingTokens ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                          Sending Tokens...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                          </svg>
+                          Send Transaction
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Disabled Perks */}
+            {(selectedPerk?.type === 'tshirt' || selectedPerk?.type === 'matcha') && (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4">
+                  <span className="text-4xl">{selectedPerk?.icon}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  {selectedPerk?.type === 'tshirt' ? 'Out of Stock' : 'Coming Soon'}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-6 max-w-xs">
+                  {selectedPerk?.type === 'tshirt' 
+                    ? 'All T-shirt NFTs have been claimed. Check back later for restocks!'
+                    : 'This perk is not available yet. Check back later!'}
+                </p>
+                {selectedPerk.requirement && (
+                  <div className="w-full bg-muted/50 rounded-lg p-4">
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-medium">Requirement:</span> {selectedPerk.requirement}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </SheetContent>
       </Sheet>

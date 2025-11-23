@@ -14,10 +14,10 @@ const frame = {
   version: "1",
   imageUrl: `${appUrl}/opengraph-image.png`,
   button: {
-    title: "Launch mimy2",
+    title: "Launch mimy",
     action: {
       type: "launch_frame",
-      name: "mimy2",
+      name: "mimy",
       url: appUrl,
       splashImageUrl: `${appUrl}/icon.png`,
       splashBackgroundColor: "#ffffff",
@@ -26,10 +26,10 @@ const frame = {
 };
 
 export const metadata: Metadata = {
-  title: 'mimy2',
+  title: 'mimy',
   description: 'may i meet you',
   openGraph: {
-    title: 'mimy2',
+    title: 'mimy',
     description: 'may i meet you',
     images: [`${appUrl}/opengraph-image.png`],
   },

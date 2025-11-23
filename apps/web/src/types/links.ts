@@ -1,4 +1,5 @@
 export type LinkType = 'social' | 'website' | 'custom' | 'nft' | 'wallet';
+export type PerkType = 'tshirt' | 'token' | 'matcha' | 'custom';
 
 export interface Link {
   id: string;
@@ -10,59 +11,46 @@ export interface Link {
   enabled: boolean;
 }
 
-export const SAMPLE_LINKS: Link[] = [
+export interface Perk {
+  id: string;
+  title: string;
+  type: PerkType;
+  icon: string;
+  description: string;
+  enabled: boolean;
+  requirement?: string;
+  action?: string;
+}
+
+export const SAMPLE_PERKS: Perk[] = [
   {
     id: '1',
-    title: 'Farcaster Profile',
-    url: 'https://warpcast.com/username',
-    type: 'social',
-    icon: '🎭',
-    description: 'Follow me on Farcaster',
-    enabled: true,
+    title: 'Claim T-Shirt NFT',
+    type: 'tshirt',
+    icon: '👕',
+    description: 'Get your exclusive T-shirt NFT',
+    enabled: false, // Out of stock
+    requirement: 'Only for humans',
+    action: 'Claim T-Shirt',
   },
   {
     id: '2',
-    title: 'Personal Website',
-    url: 'https://example.com',
-    type: 'website',
-    icon: '🌐',
-    description: 'Check out my portfolio',
+    title: 'Claim 500 Tokens',
+    type: 'token',
+    icon: '🪙',
+    description: 'Get 500 tokens sent to your wallet',
     enabled: true,
+    requirement: 'Must be 18+ years old',
+    action: 'Claim Tokens',
   },
   {
     id: '3',
-    title: 'GitHub',
-    url: 'https://github.com/username',
-    type: 'social',
-    icon: '💻',
-    description: 'View my code',
-    enabled: true,
-  },
-  {
-    id: '4',
-    title: 'NFT Collection',
-    url: 'https://zora.co/collect/...',
-    type: 'nft',
-    icon: '🖼️',
-    description: 'My latest NFT drop',
-    enabled: true,
-  },
-  {
-    id: '5',
-    title: 'Buy Me a Coffee',
-    url: 'https://buymeacoffee.com/username',
-    type: 'custom',
-    icon: '☕',
-    description: 'Support my work',
-    enabled: true,
-  },
-  {
-    id: '6',
-    title: 'Twitter',
-    url: 'https://twitter.com/username',
-    type: 'social',
-    icon: '🐦',
-    description: 'Follow on X',
-    enabled: false,
+    title: 'Free Cup of Matcha',
+    type: 'matcha',
+    icon: '🍵',
+    description: 'Enjoy a complimentary matcha on us',
+    enabled: false, // Only for girlies
+    requirement: 'Only for girlies',
+    action: 'Claim Matcha',
   },
 ];
